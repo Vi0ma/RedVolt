@@ -1,0 +1,24 @@
+# Ignore les dossiers lourds et inutiles
+node_modules/
+*/node_modules/
+package-lock.json
+yarn.lock
+
+# Ignore les fichiers de build
+dist/
+build/
+.expo/
+web-build/
+
+# Ignore les clés de sécurité et variables d'environnement
+.env
+*/.env
+
+# Ignore la base de données locale 
+*.db
+*.sqlite
+*.sqlite-journal
+
+# Logs et système
+.DS_Store
+*.log

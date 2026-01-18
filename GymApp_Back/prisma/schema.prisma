@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("MEMBER")
+  createdAt DateTime @default(now())
+  isActive  Boolean  @default(false)
+
+  wallet       Wallet?
+  bookings     Booking[]
+  orders       Order[]
+  transactions Transaction[]
+  
+  totalPoints   Int @default(0)
+  sessionsCount Int @default(0)
+
+  lastScanAt    DateTime?
+}
+
+model Wallet {
+  id      Int   @id @default(autoincrement())
+  balance Float @default(0.0)
+  
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Class {
+  id       Int      @id @default(autoincrement())
+  title    String
+  coach    String
+  date     DateTime
+  duration Int
+  capacity Int
+  booked   Int      @default(0)
+  
+  bookings Booking[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+  
+  classId Int
+  class   Class @relation(fields: [classId], references: [id])
+}
+
+model Order {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  total     Float
+  status    String   @default("PENDING")
+  isValidated Boolean @default(false) 
+
+  createdAt DateTime @default(now())
+  
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
+}
+
+model OrderItem {
+  id        Int @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  
+  order   Order   @relation(fields: [orderId], references: [id])
+  product Product @relation(fields: [productId], references: [id])
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  category    String
+  image       String
+  stock       Int      @default(10)
+  
+  createdAt   DateTime    @default(now())
+  orderItems  OrderItem[]
+}
+
+model Transaction {
+  id          Int      @id @default(autoincrement())
+  amount      Float
+  type        String
+  description String
+  createdAt   DateTime @default(now())
+  
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Challenge {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  points      Int      @default(50)
+  duration    String   @default("24H")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}

@@ -1,0 +1,10 @@
+-- CreateTable
+CREATE TABLE "Challenge" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
+    "points" INTEGER NOT NULL DEFAULT 50,
+    "duration" TEXT NOT NULL DEFAULT '24H',
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
